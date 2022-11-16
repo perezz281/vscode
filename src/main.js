@@ -571,13 +571,9 @@ async function resolveNlsConfiguration() {
 		 */
 		let appLocale = app.getLocale();
 
-		// This if statement can be simplified once
-		// VS Code moves to Electron 22.
 		// Ref https://github.com/microsoft/vscode/issues/159813
 		// and https://github.com/electron/electron/pull/36035
 		if (process.platform === 'win32'
-			&& 'getPreferredSystemLanguages' in app
-			&& typeof app.getPreferredSystemLanguages === 'function'
 			&& app.getPreferredSystemLanguages().length) {
 			// Use the most preferred OS language for language recommendation.
 			appLocale = app.getPreferredSystemLanguages()[0];
