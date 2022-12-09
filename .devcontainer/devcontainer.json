@@ -1,0 +1,17 @@
+{
+	"name": "VS Code",
+	"build": {
+		"dockerfile": "Dockerfile"
+	},
+	"overrideCommand": false,
+	"privileged": true,
+	"mounts": [
+		{
+			"source": "vscode-dev",
+			"target": "/vscode-dev",
+			"type": "volume"
+		}
+	]
+	// Container: VSCODE_IPC_HOOK_CLI= /usr/bin/code-insiders .
+	// Container: killall code-insiders
+}
