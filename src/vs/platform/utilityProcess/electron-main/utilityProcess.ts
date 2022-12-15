@@ -3,7 +3,7 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { BrowserWindow, Details, MessageChannelMain, app, utilityProcess as ElectronUtilityProcess, UtilityProces } from 'electron';
+import { BrowserWindow, Details, MessageChannelMain, app, utilityProcess, UtilityProcess as ElectronUtilityProcess } from 'electron';
 import { Disposable } from 'vs/base/common/lifecycle';
 import { Emitter, Event } from 'vs/base/common/event';
 import { ILogService } from 'vs/platform/log/common/log';
@@ -108,7 +108,7 @@ export class UtilityProcess extends Disposable {
 	private readonly _onCrash = this._register(new Emitter<IUtilityProcessCrashEvent>());
 	readonly onCrash = this._onCrash.event;
 
-	private process: UtilityProcess | undefined = undefined;
+	private process: ElectronUtilityProcess | undefined = undefined;
 	private processPid: number | undefined = undefined;
 	private configuration: IUtilityProcessConfiguration | undefined = undefined;
 
@@ -185,7 +185,7 @@ export class UtilityProcess extends Disposable {
 		this.log('creating new...', Severity.Info);
 
 		// Fork utility process
-		this.process = ElectronUtilityProcess.fork(modulePath, args, {
+		this.process = utilityProcess.fork(modulePath, args, {
 			serviceName,
 			env,
 			execArgv,
@@ -200,7 +200,7 @@ export class UtilityProcess extends Disposable {
 		this.exchangeMessagePorts(this.process, this.configuration, responseWindow);
 	}
 
-	private registerListeners(process: UtilityProcessProposedApi.UtilityProcess, configuration: IUtilityProcessConfiguration, serviceName: string): void {
+	private registerListeners(process: ElectronUtilityProcess, configuration: IUtilityProcessConfiguration, serviceName: string): void {
 
 		// Stdout
 		if (process.stdout) {
@@ -259,7 +259,7 @@ export class UtilityProcess extends Disposable {
 		}));
 	}
 
-	private exchangeMessagePorts(process: UtilityProcessProposedApi.UtilityProcess, configuration: IUtilityProcessConfiguration, responseWindow: BrowserWindow) {
+	private exchangeMessagePorts(process: ElectronUtilityProcess, configuration: IUtilityProcessConfiguration, responseWindow: BrowserWindow) {
 		const { port1: windowPort, port2: utilityProcessPort } = new MessageChannelMain();
 
 		process.postMessage('null', [utilityProcessPort]);

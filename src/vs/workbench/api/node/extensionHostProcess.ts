@@ -30,7 +30,6 @@ import 'vs/workbench/api/node/extHost.node.services';
 
 // TODO this is a layer breaker for types only provided in Electron
 import type { MessagePortMain } from 'electron';
-import type { UtilityNodeJSProcess } from 'vs/base/parts/sandbox/node/electronTypes';
 
 interface ParsedExtHostArgs {
 	transformURIs?: boolean;
@@ -135,7 +134,7 @@ function _createExtHostProtocol(): Promise<IMessagePassingProtocol> {
 				});
 			};
 
-			(process as UtilityNodeJSProcess).parentPort.on('message', (e: Electron.MessageEvent) => withPorts(e.ports));
+			process.parentPort.on('message', (e: Electron.MessageEvent) => withPorts(e.ports));
 		});
 
 	} else if (extHostConnection.type === ExtHostConnectionType.Socket) {
