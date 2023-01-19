@@ -112,7 +112,7 @@ export class ExtensionHostStarter implements IDisposable, IExtensionHostStarter 
 			type: 'extensionHost',
 			args: ['--skipWorkspaceStorageLock'],
 			execArgv: opts.execArgv ?? [],
-			allowLoadingUnsignedLibraries: true,
+			allowLoadingUnsignedLibraries: false,  // TODO(deepak1556): flip this switch once E22 internal builds are fixed.
 			correlationId: id
 		});
 	}
